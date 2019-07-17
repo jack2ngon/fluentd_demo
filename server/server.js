@@ -51,18 +51,13 @@ io.sockets.on('connection', async (socket) => {
     socket.emit('initial', []);
     setInterval(async () => {
         const executingTime = moment(); //.subtract(1, 'days');
-        const count = await ActivityLog.countDocuments({
-            "created_at" : { "$lt" : executingTime.toDate()},
-            "created_at" : { "$gte" : executingTime.clone().subtract(5, 'seconds').toDate()}
-        });
         const totalLogs = await ActivityLog.countDocuments({
             "created_at" : { "$lt" : executingTime.toDate()},
         });
         io.sockets.emit('refresh_chart', {
             time: executingTime.format('YYYY-MM-DD HH:mm:ss'),
-            timestamp: executingTime.valueOf(), 
-            number_request: count, 
+            timestamp: executingTime.valueOf(),
             total: totalLogs 
         });
-    }, 5000);
+    }, 3000);
 });
