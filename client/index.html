@@ -7,7 +7,10 @@
   <body>
 
       <div class="container-fluid">
-          <div id="graph_chart" style="height: 650px; min-width: 310px"></div>
+      	<div id="graph_chart" style="height: 650px; min-width: 310px"></div>
+          	<div style="text-align: center; padding: 50px 0;">
+          		TOTAL: <span id="total">-</span>
+          	</div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -102,9 +105,10 @@
 
     socket.on("refresh_chart", function(log)
     {
-        if (chart != null) {
+    	if (chart != null) {
             chart.series[0].addPoint([log.timestamp, log.number_request], true, true);
         }
+        $('#total').text(log.total);
     });
     $( document ).ready(function() {});
   </script>
