@@ -47,13 +47,13 @@ const calculateTotalRequest = (logsData, currentLog) => {
 
 io.sockets.on('connection', async (socket) => {
     console.log('a user connected');
-    const logsData = await getExistLogs();
-    socket.emit('initial', logsData);
+    // const logsData = await getExistLogs();
+    socket.emit('initial', []);
     setInterval(async () => {
         const executingTime = moment(); //.subtract(1, 'days');
         const count = await ActivityLog.countDocuments({
             "created_at" : { "$lt" : executingTime.toDate()},
-            "created_at" : { "$gte" : executingTime.subtract(5, 'seconds').toDate()}
+            "created_at" : { "$gte" : executingTime.clone().subtract(5, 'seconds').toDate()}
         });
         io.sockets.emit('refresh_chart', {time: executingTime.format('YYYY-MM-DD HH:MM:SS'),timestamp: executingTime.valueOf(), number_request: count});
     }, 5000);
