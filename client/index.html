@@ -2,7 +2,16 @@
 <html lang="en">
   	<body>
       	<div class="container-fluid">
-      		<h1 style="padding-top: 20px;">GRAPH CHART</h1>
+      		<h1>SUMMARY</h1>
+          	<div>
+          		<div>
+          			TIME: <span id="time">-</span>
+          		</div>
+          		<div>
+          			TOTAL: <span id="total">-</span>
+          		</div>
+          	</div>
+          	<h1 style="padding-top: 20px;">GRAPH CHART</h1>
           	<div id="graph_chart" style="height: 650px; min-width: 310px"></div>
     	</div>
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -59,44 +68,27 @@
         },
 
         series: [{
-        	type: 'area',
+        	type: 'spline',
             name: 'Nubmer Of Request',
-            data: (function () {
-	            // generate an array of random data
-	            var data = [],
-	                time = (new Date()).getTime(),
-	                i;
-
-	            for (i = -999; i <= 0; i += 1) {
-	                data.push([
-	                    time + i * 1000,
-	                    Math.round(Math.random() * 100)
-	                ]);
-	            }
-	            return data;
-	        }()),
-            gapSize: 5,
-            tooltip: {
-                valueDecimals: 2
-            },
-            fillColor: {
-                linearGradient: {
-                    x1: 0,
-                    y1: 0,
-                    x2: 0,
-                    y2: 1
-                },
-                stops: [
-                    [0, Highcharts.getOptions().colors[0]],
-                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                ]
-            },
-            threshold: null,
+            data: data: (function () {
+		      // generate an array of random data
+		      var data = [],
+		        time = (new Date()).getTime(),
+		        i;
+		      for (i = -999; i <= 0; i += 1) {
+		        data.push([
+		          time + i * 1000,
+		          0
+		        ]);
+		      }
+		      return data;
+		    }())
         }]
     });
 
     socket.on("initial", function(logsData) {
     	console.log('initial logs data');
+
     //     console.log(logsData);
     //     var data = [];
     //     logsData.forEach(function(log) {
@@ -123,8 +115,10 @@
     socket.on("refresh_chart", function(log)
     {
     	if (chart != null) {
-            chart.series[0].addPoint([log.timestamp, log.total], true, true);
+            chart.series[0].addPoint([log.timestamp, log.number_request], true, true);
         }
+        $('#total').text(log.total);
+        $('#time').text(log.time);
     });
     $( document ).ready(function() {});
   </script>
