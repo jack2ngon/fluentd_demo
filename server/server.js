@@ -59,7 +59,7 @@ io.sockets.on('connection', async (socket) => {
             "created_at" : { "$lt" : executingTime.toDate()},
         });
         io.sockets.emit('refresh_chart', {
-            time: executingTime.format('YYYY-MM-DD HH:MM:SS'),
+            time: executingTime.format('YYYY-MM-DD HH:mm:ss'),
             timestamp: executingTime.valueOf(), 
             number_request: count, 
             total: totalLogs 
