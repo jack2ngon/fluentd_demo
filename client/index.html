@@ -7,7 +7,7 @@
   <body>
 
   	<div class="container-fluid">
-  		<div id="graph_chart" style="height: 400px; min-width: 310px"></div>
+  		<div id="graph_chart" style="height: 650px; min-width: 310px"></div>
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -30,19 +30,18 @@
 
   	chart = Highcharts.stockChart('graph_chart', {
 	    chart: {
-	    	type: 'spline',
-	        // events: {
-	        //     load: function () {
+	    	// events: {
+	     //        load: function () {
 
-	        //         // set up the updating of the chart each second
-	        //         var series = this.series[0];
-	        //         setInterval(function () {
-	        //             var x = (new Date()).getTime(), // current time
-	        //                 y = Math.round(Math.random() * 100);
-	        //             series.addPoint([x, y], true, true);
-	        //         }, 1000);
-	        //     }
-	        // }
+	     //            // set up the updating of the chart each second
+	     //            var series = this.series[0];
+	     //            setInterval(function () {
+	     //                var x = (new Date()).getTime(), // current time
+	     //                    y = Math.round(Math.random() * 100);
+	     //                series.addPoint([x, y], true, true);
+	     //            }, 1000);
+	     //        }
+	     //    }
 	    },
 
 	    time: {
@@ -67,7 +66,7 @@
 	    },
 
 	    title: {
-	        text: 'LIVE request'
+	        text: 'LIVE access'
 	    },
 
 	    exporting: {
@@ -76,27 +75,12 @@
 
 	    series: [{
 	        name: 'Nubmer Of Request',
-	        data: (function () {
-	            // generate an array of random data
-	            var currentDate = new Date();
-	            currentDate.setDate( currentDate.getDate() - 2 );
-	            var data = [],
-	                time = currentDate.getTime(),
-	                i;
-
-	            for (i = -100; i <= 0; i += 1) {
-	                data.push([
-	                    time + i * 60 * 1000,
-	                    0
-	                ]);
-	            }
-	            return data;
-	        }())
+	        data: [],
 	    }]
 	});
 
 	socket.on("initial", function(logsData) {
-		console.log('A1');
+		console.log(logsData);
 		// var data = [];
 		// logsData.forEach(function(log) {
 		// 	data.push([
@@ -105,105 +89,28 @@
   //           ]);
 		// });
 
-		console.log(logsData);
+		// console.log(logsData);
+		// const initialData = [];
+		// const time = (new Date()).getTime();
 
+		// for (let i = -1000; i <= 0; i += 1) {
+  //       	initialData.push([
+  //         		time + i * 1000,
+  //         		0,
+  //       	]);
+  //     	}
+  
 		chart.series[0].update({
     		data: logsData
 		}, true); //true / false to redraw
-
-		// chart = Highcharts.stockChart('ugc_set_inview_chart', {
-		//     chart: {
-		//     	type: 'spline',
-		//         // events: {
-		//         //     load: function () {
-
-		//         //         // set up the updating of the chart each second
-		//         //         var series = this.series[0];
-		//         //         setInterval(function () {
-		//         //             var x = (new Date()).getTime(), // current time
-		//         //                 y = Math.round(Math.random() * 100);
-		//         //             series.addPoint([x, y], true, true);
-		//         //         }, 1000);
-		//         //     }
-		//         // }
-		//     },
-
-		//     time: {
-		//         useUTC: false
-		//     },
-
-		//     rangeSelector: {
-		//         buttons: [{
-		//             count: 1,
-		//             type: 'minute',
-		//             text: '1M'
-		//         }, {
-		//             count: 5,
-		//             type: 'minute',
-		//             text: '5M'
-		//         }, {
-		//             type: 'all',
-		//             text: 'All'
-		//         }],
-		//         inputEnabled: false,
-		//         selected: 0
-		//     },
-
-		//     title: {
-		//         text: 'LIVE request'
-		//     },
-
-		//     exporting: {
-		//         enabled: false
-		//     },
-
-		//     series: [{
-		//         name: 'Nubmer Of Request',
-		//         data: (function (logsData) {
-		//             // generate an array of random data
-		//             var currentDate = new Date();
-		//             //currentDate.setDate( currentDate.getDate() - 1 );
-		//             var data = [],
-		//                 time = currentDate.getTime(),
-		//                 i;
-
-		//             // for (i = -100; i <= 0; i += 1) {
-		//             //     data.push([
-		//             //         time + i * 1000,
-		//             //         0
-		//             //     ]);
-		//             // }
-		//             // return data;
-
-		//             for(i = 0; i < logsData.length; i++) {
-		//             	data.push(logsData[i]);
-		//             }
-
-		//             return data;
-		//         }())
-		//     }]
-		// });
-		// // Create the chart
-		// chart.series[0].remove();
-		// chart.addSeries({
-  //           name: 'Nubmer Of Request',
-  //           data: logsData
-  //       });
-  //       chart.redraw();
 	});
 
 	socket.on("refresh_chart", function(log)
 	{
-		console.log('A2');
 		if (chart != null) {
-			//console.log('AAA');
-			console.log(log);
 			chart.series[0].addPoint([log.timestamp, log.number_request], true, true);
-    		//chart.redraw();
     	}
-	    
 	});
-
 	$( document ).ready(function() {});
   </script>
 </html>
